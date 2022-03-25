@@ -1,5 +1,4 @@
-from hashlib import new
-from black import nullcontext
+from book import Book
 
 
 class Group():
@@ -121,3 +120,22 @@ class Group():
         else:
             # TODO aqui podria poner la opcion de donar un libro para meterlo en la base de datos
             print('El libro que deseas devolver no esta en nuestra base de datos...')
+
+    def searchBook(self, cota) -> (Book):
+        if self.book1 == None:
+            return False
+        elif self.book1.cota == cota:
+            return self.book1
+        elif self.book2 == None:
+            return False
+        elif self.book2.cota == cota:
+            return self.book2
+        elif self.book3 == None:
+            return False
+        elif self.book3.cota == cota:
+            return self.book3
+        elif self.OF == None:
+            return False
+        else:
+            return self.OF.searchBook(cota)
+
