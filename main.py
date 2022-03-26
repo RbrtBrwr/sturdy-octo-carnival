@@ -1,11 +1,50 @@
-from numpy import true_divide
 from book import Book
+from dataB import DataB
 from hashMe import hashMe
+import pdb
 
-opcionYes = ['y','yeah','si','ok','yes']
-opcionNo = ['n','nah','no','nope']
+opcionYes = ['y','yeah', 'si','ok' ,'yes', 'si va']
+opcionNo =  ['n','nah','no','nope', 'no way josay']
 
-def pantallaBusqueda():
+def buscarTitulo(dataBase):
+    value = input("Titulo: ")
+    if dataBase.checkTitles(value):
+        for i in dataBase.listaAuxiliar:
+            if i['title'].lower() == value.lower():
+                dataBase.searchBook(i['cota'])
+                return pantallaInicio(dataBase)
+        
+        print("Se ha presentado un problemilla...")
+
+    else:
+        print('No tenemos ese libro...')
+        return pantallaInicio(dataBase)
+
+def buscarSerial(dataBase):
+    value = input("Serial: ")
+    if dataBase.checkSeriales(value):
+        for i in dataBase.listaAuxiliar:
+            if i['serial'].lower() == value.lower():
+                dataBase.searchBook(i['cota'])
+                return pantallaInicio(dataBase)
+        
+        print("Se ha presentado un problemilla...")
+
+    else:
+        print('No tenemos ese libro...')
+        return pantallaInicio(dataBase)
+
+def buscarCota(dataBase):
+    value = input("Cota: ")
+    if dataBase.checkCotas(value):
+        dataBase.searchBook(value)
+        return pantallaInicio(dataBase)
+
+    else:
+        print('No tenemos ese libro...')
+        return pantallaInicio(dataBase)
+
+def pantallaBusqueda(dataBase):
     value = input("""
     Elija Opcion De Busqueda:
     1. Titulo
@@ -16,21 +55,18 @@ def pantallaBusqueda():
     """)
 
     if value == '1':
-        # TODO
-        return "titulo"
+        return buscarTitulo(dataBase)
     elif value == '2':
-        # TODO
-        return "serial"
+        return buscarSerial(dataBase)
     elif value == '3':
-        # TODO
-        return "cota"
+        return buscarCota(dataBase)
     else:
         print ("Ingrese una opcion valida...\n\n")
         return pantallaBusqueda()
 
 def revisarTitulo(dataBase, bookTitle):
-    if bookTitle not in dataBase:
-        return False
+    if bookTitle not in dataBase.listaTitulos:
+        return True
     else:
         value = input("""El libro ya se encuentra registrado...
         Desea agregar ejemplares?
@@ -47,15 +83,78 @@ def revisarTitulo(dataBase, bookTitle):
     
 
 
-def registroDeLibros():
+def registroDeLibros(dataBase):
+    print("Datos del libro a registrar:\n")
     value = True
     while value:
-        pass
         # TODO Revisar a ver si el nombre esta en la base de datos ya. 
+        title = input("Titulo: ")
+        if dataBase.checkTitles(title):
+            value = False
+        # else:
+            # TODO aqui pongo el mensaje de error o solo lo imprimo dentro de revisarTitulo y ya?
+
+    value = True
+    while value:
+
+        serial = input('Serial: ').strip()
+        if serial.lower() == 'exit':
+            return pantallaInicio()
+
+        if len(serial) != 12:
+            print("El serial debe contener 12 digitos, por favor ingresarlos todos...")
+        elif not serial.isdigit():
+            print("Todos los caracteres deben ser numericos...")
+        elif dataBase.checkSeriales(serial):
+            print("Este serial esta asignado a otro libro. Revise que ha sido ingresado correctamente e intente nuevamente...")
+        else:
+            value = False
+
+    value = True
+    while value:
+        cota = input("Cota: ").strip()
+        if cota.lower() == 'exit':
+            return pantallaInicio()
+
+        if len(cota) != 8:
+            print("La cota esta conformada por 6 letras seguidas de 2 digitos...")
+        elif not cota[0:6].isalpha():
+            print("La cota esta conformada por 6 /letras seguidas de 2 digitos...")
+        elif not cota[6:].isnumeric():
+            print("La cota esta conformada por 6 letras seguidas de 2 /digitos...")
+        elif dataBase.checkCotas(cota):
+            print("Esta cota ya se encuantra registrada...")
+        else:
+            value = False
+    
+
+    quantity = input("Si desea agregar mas de un ejemplar, por favor indicar cuantos... \nDe lo contrario, presionar enter...\n > ")
+    if quantity.lower() == 'exit':
+        return pantallaInicio() 
+    
+    if serial.isnumeric() and int(quantity) > 0:
+        quantity = int(quantity)
+    else:
+        print("Se registrara un solo ejemplar...")
+        quantity = 1
+
+    newBook = Book(title, cota, serial, quantity)
+    dataBase.addBook(newBook)
+
+    print("""El libro ha sido registrado exitosamente...""")
+    newBook.showInfo()
+    return pantallaInicio(dataBase)
+
+    # TODO y ya?...
+    
+            
 
 
 
-def pantallaInicio():
+
+
+
+def pantallaInicio(dataBase):
     value = input("""
     Bienvenido <Human Name>
     Ingrese el numero de la accion que desea realizar:
@@ -69,7 +168,7 @@ def pantallaInicio():
     > 
     """)
     if value == '1':
-        return "Rgistrar"
+        return registroDeLibros(dataBase)
     elif value == '2':
         return "Agregar"
     elif value == '3':
@@ -77,23 +176,22 @@ def pantallaInicio():
     elif value == '4':
         return "eliminar"
     elif value == '5':
-        return pantallaInicio()
+        return pantallaBusqueda(dataBase)
     elif value.lower() == 'exit':
         print("\n\n\n")
-        return pantallaBienvenida()
+        return pantallaBienvenida(dataBase)
     else:
         print("Por favor ingrese una opcion valida...\n\n")
-        return pantallaInicio()
+        return pantallaInicio(dataBase)
 
-def pantallaBienvenida():
+def pantallaBienvenida(dataBase):
     value = input("""Bienvenido a La Biblioteca
     Presione Cualquier Tecla Para Continuar
     > """)
     if value.lower() == 'exit':
         exit()
     else:
-        print("Por favor ingrese una opcion valida...")
-        return pantallaInicio()
+        return pantallaInicio(dataBase)
 
 def agregarLibro(cota, titulo, serial, cantidad, baseDatos):
     nuevoLibro = Book(titulo, cota, serial, cantidad)
@@ -101,8 +199,14 @@ def agregarLibro(cota, titulo, serial, cantidad, baseDatos):
 
 
 def main():
-    print(pantallaBienvenida())
+    # TODO
+    # Aqui voy a inicialiar la base de datos, le voy a crear un metodo para cargarle la info desde un txt y si no hay txt, la inicializ vacia ya
+    dataBase = DataB()
+    libroPrueba = Book('Elelefante Delcirco', 'ABCABC12', '111111111111', 6)
+    dataBase.addBook(libroPrueba)
+    print(dataBase.listaAuxiliar)
+    pantallaBienvenida(dataBase)
 
 if __name__ == '__main__':
-    main()
+    pdb.run(main())
     

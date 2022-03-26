@@ -5,5 +5,4 @@ def hashMe(string):
     nombre = string
     encoded = sha256(nombre.encode())
     newName = int(encoded.hexdigest(), 16)
-    print(newName)
-    print(newName % 2)
+    return newName % 2

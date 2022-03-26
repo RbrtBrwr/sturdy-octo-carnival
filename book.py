@@ -14,4 +14,13 @@ class Book():
     def addCopy(self, quantity):
         self.available = self.available + quantity
 
+    def showInfo(self):
+        print("""
+        Titulo: {}
+        Serial: {}
+        Cota: {}
+        Disponibles: {}
+        Prestados: {}
+        """.format(self.title, self.serial, self.cota, self.available, self.unavailable))
+
 

@@ -122,9 +122,12 @@ class Group():
             print('El libro que deseas devolver no esta en nuestra base de datos...')
 
     def searchBook(self, cota) -> (Book):
+        print(cota)
+        print(self.book1.cota)
         if self.book1 == None:
             return False
         elif self.book1.cota == cota:
+            print(self.book1.title)
             return self.book1
         elif self.book2 == None:
             return False
