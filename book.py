@@ -13,6 +13,7 @@ class Book():
     
     def addCopy(self, quantity):
         self.available = self.available + quantity
+        print(self.available)
 
     def showInfo(self):
         print("""

@@ -122,7 +122,6 @@ class Group():
             print('El libro que deseas devolver no esta en nuestra base de datos...')
 
     def searchBook(self, cota):
-        print(cota)
         # print(self.book1.cota)
         if self.book1 == None:
             print('No hay book1')
