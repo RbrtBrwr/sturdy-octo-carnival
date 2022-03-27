@@ -192,6 +192,7 @@ def pantallaAgregarEjemplares(dataBase):
     value = input("Ingrese el titulo del libro que desea: ")
     quantity = int(input("Ingrese cantidad de ejemplares: "))
     dataBase.findCota(value, '', quantity)
+    actualizoTxt(dataBase)
     return pantallaInicio(dataBase)
 
 

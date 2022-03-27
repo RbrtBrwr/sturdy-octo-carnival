@@ -1,3 +1,4 @@
+from turtle import title
 from grupo import Group
 from hashMe import hashMe
 
@@ -114,6 +115,9 @@ class DataB():
         book = self.grupos[hashBook].searchBook(cota)
         if book:
             book.available = book.available + quantity
+            for bookInfo in self.listaAuxiliar:
+                if (bookInfo.get("title") == book.title):
+                    bookInfo["cantidad"] = book.available
             print("Se han agregado {} copias del libro {}".format(quantity, book.title))
         else:
             print("El libro no se encuentra en nuestra base de datos, si desea puede registrarlo...")
