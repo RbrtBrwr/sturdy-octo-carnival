@@ -21,19 +21,18 @@ class DataB():
     # TODO esto podria hacer las listas atributos de dataB? o se si se 
     # updatearian automaticamente cuando agrego o quito vainas
     def checkCotas(self, cota):
-        cotaList = [item['cota'] for item in self.listaAuxiliar]
-        print(cotaList)
-        return cota in cotaList
+        return len(list(filter(lambda x: x['cota'].lower() == cota.lower(), self.listaAuxiliar))) < 0
+
             
 
     def checkSeriales(self, serial):
-        serialList = [item['serial'] for item in self.listaAuxiliar]
-        print(serialList)
-        return serial in serialList
+        return len(list(filter(lambda x: x['serial'].lower() == serial.lower(), self.listaAuxiliar))) < 0
+
     
     def checkTitles(self, title):
-        titleList = [item['title'] for item in self.listaAuxiliar]
-        return title in titleList
+        print(list(filter(lambda x: x['serial'].lower() == title.lower(), self.listaAuxiliar)))
+        return len(list(filter(lambda x: x['title'].lower() == title.lower(), self.listaAuxiliar))) < 0
+
 
     def searchBook(self, cota):
         hashBook = hashMe(cota)

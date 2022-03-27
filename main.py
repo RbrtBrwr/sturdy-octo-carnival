@@ -89,7 +89,7 @@ def registroDeLibros(dataBase):
     while value:
         # TODO Revisar a ver si el nombre esta en la base de datos ya. 
         title = input("Titulo: ")
-        if dataBase.checkTitles(title):
+        if not dataBase.checkTitles(title):
             value = False
         # else:
             # TODO aqui pongo el mensaje de error o solo lo imprimo dentro de revisarTitulo y ya?
