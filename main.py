@@ -1,16 +1,42 @@
+
 from book import Book
 from dataB import DataB
-from hashMe import hashMe
-import pdb
+import json
+import ast
 
 opcionYes = ['y','yeah', 'si','ok' ,'yes', 'si va']
 opcionNo =  ['n','nah','no','nope', 'no way josay']
 
+def chequeoTxt(dataBase):
+    everything = open('DiscoDuro.txt', 'r')
+    libros = everything.read().split("\n")
+    i = 0
+    while (i < (len(libros)- 1)):
+        diccionarioLibros = ast.literal_eval(libros[i])
+        # cantidad = diccionarioLibros.get("cantidad")
+        newLibro = Book(diccionarioLibros.get("title"), diccionarioLibros.get("cota"), diccionarioLibros.get("serial"))
+        dataBase.addBook(newLibro)
+        i = i + 1 
+    # print(dataBase.listaAuxiliar)
+
+def actualizoTxt(dataBase):
+    z = 0
+    with open('DiscoDuro.txt', 'w') as writeCS:
+        while (z < len(dataBase.listaAuxiliar)):
+            writeCS.write(json.dumps(dataBase.listaAuxiliar[z])+"\n")
+            z = z + 1
+
+
+
+
 def buscarTitulo(dataBase):
     value = input("Titulo: ")
+    
     if dataBase.checkTitles(value):
         for i in dataBase.listaAuxiliar:
+
             if i['title'].lower() == value.lower():
+
                 dataBase.searchBook(i['cota'])
                 return pantallaInicio(dataBase)
         
@@ -93,6 +119,8 @@ def registroDeLibros(dataBase):
             value = False
         # else:
             # TODO aqui pongo el mensaje de error o solo lo imprimo dentro de revisarTitulo y ya?
+        else:
+            value = False
 
     value = True
     while value:
@@ -143,6 +171,7 @@ def registroDeLibros(dataBase):
 
     print("""El libro ha sido registrado exitosamente...""")
     newBook.showInfo()
+    actualizoTxt(dataBase)
     return pantallaInicio(dataBase)
 
     # TODO y ya?...
@@ -168,6 +197,7 @@ def pantallaInicio(dataBase):
     > 
     """)
     if value == '1':
+        print(dataBase.listaAuxiliar, dataBase.listaCotas)
         return registroDeLibros(dataBase)
     elif value == '2':
         return "Agregar"
@@ -202,11 +232,13 @@ def main():
     # TODO
     # Aqui voy a inicialiar la base de datos, le voy a crear un metodo para cargarle la info desde un txt y si no hay txt, la inicializ vacia ya
     dataBase = DataB()
-    libroPrueba = Book('Elelefante Delcirco', 'ABCABC12', '111111111111', 6)
-    dataBase.addBook(libroPrueba)
-    print(dataBase.listaAuxiliar)
+    # Me falta chequear si hay libros en la base de datos o no
+    chequeoTxt(dataBase)
+    # print(dataBase.listaAuxiliar)
+    # Metodo para agregar Jsons en el txt
+    # actualizoTxt(dataBase)
     pantallaBienvenida(dataBase)
 
 if __name__ == '__main__':
-    pdb.run(main())
+    main()
     

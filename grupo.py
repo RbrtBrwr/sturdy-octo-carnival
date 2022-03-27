@@ -9,11 +9,14 @@ class Group():
     groupNumber = 0
 
     def addBook(self, book):
-        if self.book1 != None:
+        if self.book1 == None:
+            print('agregado book1')
             self.book1 = book
-        elif self.book2 != None:
+        elif self.book2 == None:
+            print('agregado book2')
             self.book2 = book
-        elif self.book3 != None:
+        elif self.book3 == None:
+            print('agregado book3')
             self.book3 = book
         else:
             if self.groupNumber <= 6:
@@ -121,19 +124,22 @@ class Group():
             # TODO aqui podria poner la opcion de donar un libro para meterlo en la base de datos
             print('El libro que deseas devolver no esta en nuestra base de datos...')
 
-    def searchBook(self, cota) -> (Book):
+    def searchBook(self, cota):
         print(cota)
-        print(self.book1.cota)
+        # print(self.book1.cota)
         if self.book1 == None:
+            print('No hay book1')
             return False
         elif self.book1.cota == cota:
             print(self.book1.title)
             return self.book1
         elif self.book2 == None:
+            print('No hay book2')
             return False
         elif self.book2.cota == cota:
             return self.book2
         elif self.book3 == None:
+            print('No hay book3')
             return False
         elif self.book3.cota == cota:
             return self.book3
