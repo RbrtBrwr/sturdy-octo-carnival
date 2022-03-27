@@ -123,7 +123,7 @@ class Group():
 
     def searchBook(self, cota) -> (Book):
         print(cota)
-        print(self.book1.cota)
+        # print(self.book1.cota)
         if self.book1 == None:
             return False
         elif self.book1.cota == cota:

@@ -33,11 +33,24 @@ class DataB():
     
     def checkTitles(self, title):
         titleList = [item['title'] for item in self.listaAuxiliar]
-        return title in titleList
+        i = 0
+        epa = False
+        while (i < len(titleList)):
+
+            if (titleList[i].lower() == title.lower()):
+                epa = True
+                break
+
+            i = i + 1    
+        return epa
 
     def searchBook(self, cota):
         hashBook = hashMe(cota)
+        # Llega hasta aqui el search pero aqui da False no se que hace esta funcion si ya tenemos que 
+        # el titulo se encuentra lo podriamos sacar de una la info pero como lo hacemos "a" 
         book = self.grupos[hashBook].searchBook(cota)
+        # Este book da un booleano esta mega sus hay que cambiar esto para que muestre bien la info el libro pero ya estoy rascado salu2 robert
+        print("True o false di")
         if book:
             book.showInfo()
         else:
