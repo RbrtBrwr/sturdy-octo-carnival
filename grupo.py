@@ -10,13 +10,10 @@ class Group():
 
     def addBook(self, book):
         if self.book1 == None:
-            print('agregado book1')
             self.book1 = book
         elif self.book2 == None:
-            print('agregado book2')
             self.book2 = book
         elif self.book3 == None:
-            print('agregado book3')
             self.book3 = book
         else:
             if self.groupNumber <= 6:

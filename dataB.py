@@ -65,14 +65,73 @@ class DataB():
 
     def searchBook(self, cota):
         hashBook = hashMe(cota)
-        # Llega hasta aqui el search pero aqui da False no se que hace esta funcion si ya tenemos que 
-        # el titulo se encuentra lo podriamos sacar de una la info pero como lo hacemos "a" 
         book = self.grupos[hashBook].searchBook(cota)
-        # Este book da un booleano esta mega sus hay que cambiar esto para que muestre bien la info el libro pero ya estoy rascado salu2 robert
-        print("True o false di")
         if book:
             book.showInfo()
         else:
             print("El libro que busca no se encuentra en nuestra base de datos...")
 
         input('Presione cualquier tecla para continuar...')
+
+    def findBook(self, cota):
+        hashBook = hashMe(cota)
+        book = self.grupos[hashBook].searchBook(cota)
+        if book:
+            return book
+        else:
+            print("El libro que busca no se encuentra en nuestra base de datos...")
+
+        input('Presione cualquier tecla para continuar...')
+    
+    def borrowBook(self, cota):
+        hashBook = hashMe(cota)
+        book = self.grupos[hashBook].searchBook(cota)
+        if book:
+            if book.available > 0:
+                book.available = book.available - 1
+                book.unavailable = book.unavailable + 1
+                print("Se ha realizado un prestamo del libro {}".format(book.title))
+            else:
+                print("No tenemos ejemplares de ese libro en este momento...")
+        else:
+            print("El libro que busca no se encuentra en nuestra base de datos...")
+
+        input('Presione cualquier tecla para continuar...')
+    
+    def returnBook(self, cota):
+        hashBook = hashMe(cota)
+        book = self.grupos[hashBook].searchBook(cota)
+        if book:
+            book.available = book.available + 1
+            book.unavailable = book.unavailable - 1
+            print("Se ha regresado el libro {}".format(book.title))
+        else:
+            print("El libro que busca no se encuentra en nuestra base de datos...")
+
+        input('Presione cualquier tecla para continuar...')
+
+    def addCopy(self, cota, quantity):
+        hashBook = hashMe(cota)
+        book = self.grupos[hashBook].searchBook(cota)
+        if book:
+            book.available = book.available + quantity
+            print("Se han agregado {} copias del libro {}".format(quantity, book.title))
+        else:
+            print("El libro no se encuentra en nuestra base de datos, si desea puede registrarlo...")
+
+        input('Presione cualquier tecla para continuar...')
+
+    def findCota(self, title, action, quantity=0):
+        for i in self.listaAuxiliar:
+            if i['title'].lower() == title.lower():
+                if action == 'prestamo':
+                    self.borrowBook(i['cota'])
+                    return
+                elif action == 'regreso':
+                    self.returnBook(i['cota'])
+                    return
+                else:
+                    self.addCopy(i['cota'], quantity)
+                    return
+        
+        print("Se ha presentado un problemilla...")

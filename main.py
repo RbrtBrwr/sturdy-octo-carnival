@@ -1,4 +1,5 @@
 
+from multiprocessing.connection import wait
 from book import Book
 from dataB import DataB
 import json
@@ -14,7 +15,7 @@ def chequeoTxt(dataBase):
     while (i < (len(libros)- 1)):
         diccionarioLibros = ast.literal_eval(libros[i])
         # cantidad = diccionarioLibros.get("cantidad")
-        newLibro = Book(diccionarioLibros.get("title"), diccionarioLibros.get("cota"), diccionarioLibros.get("serial"))
+        newLibro = Book(diccionarioLibros.get("title"), diccionarioLibros.get("cota"), diccionarioLibros.get("serial"), diccionarioLibros.get("cantidad"))
         dataBase.addBook(newLibro)
         i = i + 1 
     # print(dataBase.listaAuxiliar)
@@ -25,9 +26,6 @@ def actualizoTxt(dataBase):
         while (z < len(dataBase.listaAuxiliar)):
             writeCS.write(json.dumps(dataBase.listaAuxiliar[z])+"\n")
             z = z + 1
-
-
-
 
 def buscarTitulo(dataBase):
     value = input("Titulo: ")
@@ -88,7 +86,7 @@ def pantallaBusqueda(dataBase):
         return buscarCota(dataBase)
     else:
         print ("Ingrese una opcion valida...\n\n")
-        return pantallaBusqueda()
+        return pantallaBusqueda(dataBase)
 
 def revisarTitulo(dataBase, bookTitle):
     if bookTitle not in dataBase.listaTitulos:
@@ -104,10 +102,6 @@ def revisarTitulo(dataBase, bookTitle):
         if value in opcionNo:
             pass 
             # TODO en verdad no se que va a pasar aqui
-
-
-    
-
 
 def registroDeLibros(dataBase):
     print("Datos del libro a registrar:\n")
@@ -127,7 +121,7 @@ def registroDeLibros(dataBase):
 
         serial = input('Serial: ').strip()
         if serial.lower() == 'exit':
-            return pantallaInicio()
+            return pantallaInicio(dataBase)
 
         if len(serial) != 12:
             print("El serial debe contener 12 digitos, por favor ingresarlos todos...")
@@ -142,7 +136,7 @@ def registroDeLibros(dataBase):
     while value:
         cota = input("Cota: ").strip()
         if cota.lower() == 'exit':
-            return pantallaInicio()
+            return pantallaInicio(dataBase)
 
         if len(cota) != 8:
             print("La cota esta conformada por 6 letras seguidas de 2 digitos...")
@@ -158,7 +152,7 @@ def registroDeLibros(dataBase):
 
     quantity = input("Si desea agregar mas de un ejemplar, por favor indicar cuantos... \nDe lo contrario, presionar enter...\n > ")
     if quantity.lower() == 'exit':
-        return pantallaInicio() 
+        return pantallaInicio(dataBase) 
     
     if serial.isnumeric() and int(quantity) > 0:
         quantity = int(quantity)
@@ -173,14 +167,32 @@ def registroDeLibros(dataBase):
     newBook.showInfo()
     actualizoTxt(dataBase)
     return pantallaInicio(dataBase)
+           
+def pantallaPrestamos(dataBase):
+    value = input("Ingrese el titulo del libro que desea: ")
+    if dataBase.checkTitles(value):
+        dataBase.findCota(value, 'prestamo')
+        return pantallaInicio(dataBase)
 
-    # TODO y ya?...
-    
-            
+    else:
+        print('No tenemos ese libro...')
+        return pantallaInicio(dataBase)
 
+def pantallaRegreso(dataBase):
+    value = input("Ingrese el titulo del libro que desea: ")
+    if dataBase.checkTitles(value):
+        dataBase.findCota(value, 'regreso')
+        return pantallaInicio(dataBase)
 
+    else:
+        print('Ese libro no es nuestro...')
+        return pantallaInicio(dataBase)
 
-
+def pantallaAgregarEjemplares(dataBase):
+    value = input("Ingrese el titulo del libro que desea: ")
+    quantity = int(input("Ingrese cantidad de ejemplares: "))
+    dataBase.findCota(value, '', quantity)
+    return pantallaInicio(dataBase)
 
 
 def pantallaInicio(dataBase):
@@ -200,11 +212,11 @@ def pantallaInicio(dataBase):
         print(dataBase.listaAuxiliar, dataBase.listaCotas)
         return registroDeLibros(dataBase)
     elif value == '2':
-        return "Agregar"
+        return pantallaAgregarEjemplares(dataBase)
     elif value == '3':
-        return "Eliminar"
+        return pantallaPrestamos(dataBase)
     elif value == '4':
-        return "eliminar"
+        return pantallaRegreso(dataBase)
     elif value == '5':
         return pantallaBusqueda(dataBase)
     elif value.lower() == 'exit':
