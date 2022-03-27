@@ -12,11 +12,10 @@ class DataB():
 
     def addBook(self, book):
         hashBook = hashMe(book.cota)
-        print(hashBook)
         selectedGroup = self.grupos[hashBook]
         selectedGroup.addBook(book)
 
-        aux = {'cota': book.cota, 'title':book.title, 'serial':book.serial}
+        aux = {'cota': book.cota, 'title':book.title, 'serial':book.serial, 'cantidad':book.available}
         self.listaAuxiliar.append(aux)
 
     # estas retornan falso si no encuentran el valor en la lista

@@ -209,7 +209,6 @@ def pantallaInicio(dataBase):
     > 
     """)
     if value == '1':
-        print(dataBase.listaAuxiliar, dataBase.listaCotas)
         return registroDeLibros(dataBase)
     elif value == '2':
         return pantallaAgregarEjemplares(dataBase)
