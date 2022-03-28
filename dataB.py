@@ -19,9 +19,20 @@ class DataB():
         aux = {'cota': book.cota, 'title':book.title, 'serial':book.serial, 'cantidad':book.available}
         self.listaAuxiliar.append(aux)
 
-    # estas retornan falso si no encuentran el valor en la lista
-    # TODO esto podria hacer las listas atributos de dataB? o se si se 
-    # updatearian automaticamente cuando agrego o quito vainas
+    def checkData(self):
+        print('lista cotas ----------------')
+        print(self.listaCotas)
+        print('lista seriales ---------------')
+        print(self.listaSeriales)
+        print('lista titulos --------------------')
+        print(self.listaTitulos)
+        print('lista auxiliar ----------------')
+        print(self.listaAuxiliar)
+        
+        for i in self.grupos:
+            i.checkData()
+
+        
     def checkCotas(self, cota):
         # return len(list(filter(lambda x: x['cota'].lower() == cota.lower(), self.listaAuxiliar))) < 0          
         cotaList = [item['cota'] for item in self.listaAuxiliar]
@@ -124,6 +135,17 @@ class DataB():
 
         input('Presione cualquier tecla para continuar...')
 
+    def removeBook(self, cota):
+        hashBook = hashMe(cota)
+        book = self.grupos[hashBook].searchBook(cota)
+        if book:
+            self.grupos[hashBook].removeBook(book.title)
+            print('Todos los ejemplares del libro {} han sido quemados'.format(book.title))
+        else:
+            print('No hay ejemplares que quemar...')
+
+        input('Presione cualquier tecla para continuar...')
+
     def findCota(self, title, action, quantity=0):
         for i in self.listaAuxiliar:
             if i['title'].lower() == title.lower():
@@ -133,8 +155,15 @@ class DataB():
                 elif action == 'regreso':
                     self.returnBook(i['cota'])
                     return
-                else:
+                elif action == 'agregar':
                     self.addCopy(i['cota'], quantity)
+                    return
+                elif action == 'eliminar':
+                    value = input('Escriba "CONFIRMAR" si desea eliminar este libro: ')
+                    if value.lower() == 'confirmar':
+                        self.removeBook(i['cota'])
+                    else:
+                        print('Cancelada la eliminacion...')
                     return
         
         print("Se ha presentado un problemilla...")

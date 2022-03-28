@@ -4,6 +4,8 @@ from book import Book
 from dataB import DataB
 import json
 import ast
+import sys
+
 
 opcionYes = ['y','yeah', 'si','ok' ,'yes', 'si va']
 opcionNo =  ['n','nah','no','nope', 'no way josay']
@@ -69,14 +71,14 @@ def buscarCota(dataBase):
         return pantallaInicio(dataBase)
 
 def pantallaBusqueda(dataBase):
-    value = input("""
+    print("""
     Elija Opcion De Busqueda:
     1. Titulo
     2. Serial
     3. Cota
-    
-    >
+
     """)
+    value = input('> ')
 
     if value == '1':
         return buscarTitulo(dataBase)
@@ -92,27 +94,15 @@ def revisarTitulo(dataBase, bookTitle):
     if bookTitle not in dataBase.listaTitulos:
         return True
     else:
-        value = input("""El libro ya se encuentra registrado...
-        Desea agregar ejemplares?
-        (Y/N) > """)
-        if value in opcionYes:
-            pass
-            # TODO
-            # return agregarEjemplar
-        if value in opcionNo:
-            pass 
-            # TODO en verdad no se que va a pasar aqui
+        return False
 
 def registroDeLibros(dataBase):
     print("Datos del libro a registrar:\n")
     value = True
     while value:
-        # TODO Revisar a ver si el nombre esta en la base de datos ya. 
         title = input("Titulo: ")
         if not dataBase.checkTitles(title):
             value = False
-        # else:
-            # TODO aqui pongo el mensaje de error o solo lo imprimo dentro de revisarTitulo y ya?
         else:
             value = False
 
@@ -154,7 +144,7 @@ def registroDeLibros(dataBase):
     if quantity.lower() == 'exit':
         return pantallaInicio(dataBase) 
     
-    if serial.isnumeric() and int(quantity) > 0:
+    if quantity.isnumeric() and int(quantity) > 0:
         quantity = int(quantity)
     else:
         print("Se registrara un solo ejemplar...")
@@ -191,13 +181,18 @@ def pantallaRegreso(dataBase):
 def pantallaAgregarEjemplares(dataBase):
     value = input("Ingrese el titulo del libro que desea: ")
     quantity = int(input("Ingrese cantidad de ejemplares: "))
-    dataBase.findCota(value, '', quantity)
+    dataBase.findCota(value, 'agregar', quantity)
     actualizoTxt(dataBase)
+    return pantallaInicio(dataBase)
+
+def pantallaEliminarLibros(dataBase):
+    value = input("Ingrese el titulo del libro que desea eliminar: ")
+    dataBase.findCota(value, 'eliminar')
     return pantallaInicio(dataBase)
 
 
 def pantallaInicio(dataBase):
-    value = input("""
+    print("""
     Bienvenido <Human Name>
     Ingrese el numero de la accion que desea realizar:
     1. Registrar Nuevo Libro
@@ -205,10 +200,12 @@ def pantallaInicio(dataBase):
     3. Realizar Prestamo
     4. Reingresar Un Libro
     5. Buscar Libros
+    6. Quemar Libros
 
-    Ingrese EXIT para salir
-    > 
+    Ingrese EXIT para salir 
+
     """)
+    value = input('> ')
     if value == '1':
         return registroDeLibros(dataBase)
     elif value == '2':
@@ -222,14 +219,22 @@ def pantallaInicio(dataBase):
     elif value.lower() == 'exit':
         print("\n\n\n")
         return pantallaBienvenida(dataBase)
+    elif value == '6':
+        return pantallaEliminarLibros(dataBase)
+        
+    elif value == '420':
+        dataBase.checkData()
+        return pantallaBienvenida(dataBase)
     else:
         print("Por favor ingrese una opcion valida...\n\n")
         return pantallaInicio(dataBase)
 
 def pantallaBienvenida(dataBase):
-    value = input("""Bienvenido a La Biblioteca
+    print("""
+    Bienvenido a La Biblioteca
     Presione Cualquier Tecla Para Continuar
-    > """)
+    """)
+    value = input('> ')
     if value.lower() == 'exit':
         exit()
     else:
@@ -241,14 +246,11 @@ def agregarLibro(cota, titulo, serial, cantidad, baseDatos):
 
 
 def main():
-    # TODO
-    # Aqui voy a inicialiar la base de datos, le voy a crear un metodo para cargarle la info desde un txt y si no hay txt, la inicializ vacia ya
+    
+    sys.setrecursionlimit(1500)
+    print('\n\n\n')
     dataBase = DataB()
-    # Me falta chequear si hay libros en la base de datos o no
     chequeoTxt(dataBase)
-    # print(dataBase.listaAuxiliar)
-    # Metodo para agregar Jsons en el txt
-    # actualizoTxt(dataBase)
     pantallaBienvenida(dataBase)
 
 if __name__ == '__main__':
