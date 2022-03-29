@@ -172,6 +172,7 @@ def pantallaPrestamos(dataBase):
     value = input("Ingrese el titulo del libro que desea: ")
     if dataBase.checkTitles(value):
         dataBase.findCota(value, 'prestamo')
+        actualizoTxt(dataBase)
         return pantallaInicio(dataBase)
 
     else:
@@ -182,6 +183,7 @@ def pantallaRegreso(dataBase):
     value = input("Ingrese el titulo del libro que desea: ")
     if dataBase.checkTitles(value):
         dataBase.findCota(value, 'regreso')
+        actualizoTxt(dataBase)
         return pantallaInicio(dataBase)
 
     else:
