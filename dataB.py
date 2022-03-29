@@ -1,6 +1,11 @@
+from dataclasses import dataclass
 from turtle import title
 from grupo import Group
 from hashMe import hashMe
+# Quick Ejemplo para el txt
+# {"cota": "abcabc12", "title": "Hola", "serial": "123412341234", "cantidad": 6}
+# {"cota": "abcabc13", "title": "test", "serial": "123412341233", "cantidad": 3}
+# {"cota": "ABCABS23", "title": "testaijaijdapwjdawk", "serial": "123412341222", "cantidad": 3}
 
 class DataB():
     listaCotas = []
@@ -143,6 +148,7 @@ class DataB():
     def removeBook(self, cota):
         hashBook = hashMe(cota)
         book = self.grupos[hashBook].searchBook(cota)
+        print(self.listaAuxiliar)
         if book:
             self.grupos[hashBook].removeBook(book.title)
             print('Todos los ejemplares del libro {} han sido quemados'.format(book.title))
@@ -167,6 +173,7 @@ class DataB():
                     value = input('Escriba "CONFIRMAR" si desea eliminar este libro: ')
                     if value.lower() == 'confirmar':
                         self.removeBook(i['cota'])
+                        print(self.listaAuxiliar)
                     else:
                         print('Cancelada la eliminacion...')
                     return
