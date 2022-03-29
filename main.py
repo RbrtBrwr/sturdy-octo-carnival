@@ -1,12 +1,10 @@
-
-from multiprocessing.connection import wait
-
-from sympy import true
 from book import Book
 from dataB import DataB
 import json
 import ast
 import sys
+
+from hashMe import hashMe
 
 
 opcionYes = ['y','yeah', 'si','ok' ,'yes', 'si va']
@@ -18,7 +16,6 @@ def chequeoTxt(dataBase):
     i = 0
     while (i < (len(libros)- 1)):
         diccionarioLibros = ast.literal_eval(libros[i])
-        # cantidad = diccionarioLibros.get("cantidad")
         newLibro = Book(diccionarioLibros.get("title"), diccionarioLibros.get("cota"), diccionarioLibros.get("serial"), diccionarioLibros.get("cantidad"))
         dataBase.addBook(newLibro)
         i = i + 1 
@@ -250,7 +247,6 @@ def agregarLibro(cota, titulo, serial, cantidad, baseDatos):
 
 
 def main():
-    
     sys.setrecursionlimit(1500)
     print('\n\n\n')
     dataBase = DataB()

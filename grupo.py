@@ -8,6 +8,32 @@ class Group():
     OF = None
     groupNumber = 0
 
+    def updateList(self, lista=[]):
+        if self.book1 != None:
+            aux = {'cota': self.book1.cota, 'title':self.book1.title, 'serial':self.book1.serial, 'cantidad':self.book1.available}
+            lista.append(aux)
+        elif self.book1 == None:
+            return lista
+
+        if self.book2 != None:
+            aux = {'cota': self.book2.cota, 'title':self.book2.title, 'serial':self.book2.serial, 'cantidad':self.book2.available}
+            lista.append(aux)
+        elif self.book2 == None:
+            return lista
+        
+        if self.book3 != None:
+            aux = {'cota': self.book3.cota, 'title':self.book3.title, 'serial':self.book3.serial, 'cantidad':self.book3.available}
+            lista.append(aux)
+        elif self.book3 == None:
+            return lista
+        
+        if self.OF != None:
+            return self.OF.updateList(lista)
+        else:
+            return lista
+        
+
+
     def checkData(self):
         print("grupo: {}".format(self.groupNumber))
         if self.book1 == None:
@@ -97,8 +123,6 @@ class Group():
                 else:
                     self.book3 = None
                     return 
-
-        print('CREO que ese libro no existe... creo...')
         return
 
 

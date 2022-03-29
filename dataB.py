@@ -2,10 +2,6 @@ from dataclasses import dataclass
 from turtle import title
 from grupo import Group
 from hashMe import hashMe
-# Quick Ejemplo para el txt
-# {"cota": "abcabc12", "title": "Hola", "serial": "123412341234", "cantidad": 6}
-# {"cota": "abcabc13", "title": "test", "serial": "123412341233", "cantidad": 3}
-# {"cota": "ABCABS23", "title": "testaijaijdapwjdawk", "serial": "123412341222", "cantidad": 3}
 
 class DataB():
     listaCotas = []
@@ -24,21 +20,17 @@ class DataB():
         self.listaAuxiliar.append(aux)
 
     def checkData(self):
-        print('lista cotas ----------------')
-        print(self.listaCotas)
-        print('lista seriales ---------------')
-        print(self.listaSeriales)
-        print('lista titulos --------------------')
-        print(self.listaTitulos)
-        print('lista auxiliar ----------------')
-        print(self.listaAuxiliar)
-        
         for i in self.grupos:
             i.checkData()
 
+    def updateAux(self, titulo):
+        for i in self.listaAuxiliar:
+            if i['title'].lower() == titulo:
+                self.listaAuxiliar.remove(i)
+
+
         
     def checkCotas(self, cota):
-        # return len(list(filter(lambda x: x['cota'].lower() == cota.lower(), self.listaAuxiliar))) < 0          
         cotaList = [item['cota'] for item in self.listaAuxiliar]
         i = 0
         epa = False
@@ -52,7 +44,6 @@ class DataB():
         return epa
 
     def checkSeriales(self, serial):
-        # return len(list(filter(lambda x: x['serial'].lower() == serial.lower(), self.listaAuxiliar))) < 0
         serialList = [item['serial'] for item in self.listaAuxiliar]
         i = 0
         epa = False
@@ -148,13 +139,13 @@ class DataB():
     def removeBook(self, cota):
         hashBook = hashMe(cota)
         book = self.grupos[hashBook].searchBook(cota)
-        print(self.listaAuxiliar)
         if book:
             self.grupos[hashBook].removeBook(book.title)
             print('Todos los ejemplares del libro {} han sido quemados'.format(book.title))
         else:
             print('No hay ejemplares que quemar...')
 
+        self.updateAux(book.title)
         input('Presione cualquier tecla para continuar...')
 
     def findCota(self, title, action, quantity=0):
@@ -171,9 +162,8 @@ class DataB():
                     return
                 elif action == 'eliminar':
                     value = input('Escriba "CONFIRMAR" si desea eliminar este libro: ')
-                    if value.lower() == 'confirmar':
+                    if value.lower() == 'confirmar' or value.lower() == 'x':
                         self.removeBook(i['cota'])
-                        print(self.listaAuxiliar)
                     else:
                         print('Cancelada la eliminacion...')
                     return
