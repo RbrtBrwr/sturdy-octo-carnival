@@ -1,5 +1,7 @@
 
 from multiprocessing.connection import wait
+
+from sympy import true
 from book import Book
 from dataB import DataB
 import json
@@ -20,7 +22,6 @@ def chequeoTxt(dataBase):
         newLibro = Book(diccionarioLibros.get("title"), diccionarioLibros.get("cota"), diccionarioLibros.get("serial"), diccionarioLibros.get("cantidad"))
         dataBase.addBook(newLibro)
         i = i + 1 
-    # print(dataBase.listaAuxiliar)
 
 def actualizoTxt(dataBase):
     z = 0
@@ -190,6 +191,7 @@ def pantallaAgregarEjemplares(dataBase):
 def pantallaEliminarLibros(dataBase):
     value = input("Ingrese el titulo del libro que desea eliminar: ")
     dataBase.findCota(value, 'eliminar')
+    actualizoTxt(dataBase)
     return pantallaInicio(dataBase)
 
 
