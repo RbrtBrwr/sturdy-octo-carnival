@@ -8,6 +8,28 @@ class Group():
     OF = None
     groupNumber = 0
 
+    def checkData(self):
+        print("grupo: {}".format(self.groupNumber))
+        if self.book1 == None:
+            return
+        else:
+            self.book1.showInfo()
+
+        if self.book2 == None:
+            return
+        else:
+            self.book2.showInfo()
+
+        if self.book3 == None:
+           return
+        else:
+            self.book3.showInfo()
+
+        if self.OF == None:
+            return
+        else:
+            return self.OF.checkData()
+
     def addBook(self, book):
         if self.book1 == None:
             self.book1 = book
@@ -17,8 +39,10 @@ class Group():
             self.book3 = book
         else:
             if self.groupNumber <= 6:
-                self.OF = Group()
+                if self.OF == None:
+                    self.OF = Group()
                 self.OF.setGroupNumber(self.groupNumber + 1)
+                self.OF.addBook(book)
             else:
                 print("El grupo se ha llenado completamente...")
    
@@ -40,35 +64,43 @@ class Group():
         self.groupNumber = number
 
     def removeBook(self, bookTitle):
-        """
-            TODO
-            Primero busco para ver si existe
-            Como los titulos tienen que ser unicos tambien busco por titulo y ya
-        """
         if self.book1 != None and self.book1.title == bookTitle:
-            if self.book2 != None:
-                self.book1 = self.book2
-                self.removeBook(self.book2.title)
-            else:
-                self.book1 = None
+                if self.book2 != None:
+                    storeBook = self.book2
+                    self.removeBook(self.book2.title)
+                    self.book1 = storeBook
+                    return
 
-        elif self.book2 != None and self.book2.title == bookTitle:
-            if self.book3 != None:
-                self.book2 = self.book3
-                self.removeBook(self.book3.title)
-            else:
-                self.book2 = None
+                else:
+                    self.book1 = None
+                    return
 
-        elif self.book3 != None and self.book3.title == bookTitle:
-            if self.OF != None:
-                self.OF.removeBook(self.OF.book1.title)
-            else:
-                self.book3 = None
-        else:
-            print('CREO que ese libro no existe... creo...')
-        
-        if self.OF.book1 == None:
-            self.OF = None
+
+        if self.book2 != None and self.book2.title == bookTitle:
+                if self.book3 != None:
+                    storeBook = self.book3
+                    self.removeBook(self.book3.title)
+                    self.book2 = storeBook
+                    return
+
+                else:
+                    self.book2 = None
+
+
+        if self.book3 != None and self.book3.title == bookTitle:
+                if self.OF != None:
+                    storeBook = self.OF.book1
+                    self.OF.removeBook(self.OF.book1.title)
+                    self.book3 = storeBook
+                    return
+
+                else:
+                    self.book3 = None
+                    return 
+
+        print('CREO que ese libro no existe... creo...')
+        return
+
 
     def leaseBook(self, bookTitle):
         # Estoy considerando que nadie va a alquilar mas de un ejemplar de un mismo libro a la vez
@@ -124,18 +156,14 @@ class Group():
     def searchBook(self, cota):
         # print(self.book1.cota)
         if self.book1 == None:
-            print('No hay book1')
             return False
         elif self.book1.cota == cota:
-            print(self.book1.title)
             return self.book1
         elif self.book2 == None:
-            print('No hay book2')
             return False
         elif self.book2.cota == cota:
             return self.book2
         elif self.book3 == None:
-            print('No hay book3')
             return False
         elif self.book3.cota == cota:
             return self.book3
