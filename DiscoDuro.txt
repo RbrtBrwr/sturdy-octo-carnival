@@ -1,2 +1,3 @@
 {"cota": "qweqwe12", "title": "dua lipa", "serial": "123456789012", "cantidad": 1}
 {"cota": "poipoi98", "title": "elelefante delcirco", "serial": "098098098098", "cantidad": 1}
+{"cota": "ABCDEF23", "title": "Demasiadas Mujeres", "serial": "420420420420", "cantidad": 23435234}
