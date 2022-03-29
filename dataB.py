@@ -2,7 +2,6 @@ from turtle import title
 from grupo import Group
 from hashMe import hashMe
 
-
 class DataB():
     listaCotas = []
     listaSeriales = []
@@ -101,6 +100,9 @@ class DataB():
             if book.available > 0:
                 book.available = book.available - 1
                 book.unavailable = book.unavailable + 1
+                for bookInfo in self.listaAuxiliar:
+                    if (bookInfo.get("title") == book.title):
+                        bookInfo["cantidad"] = book.available
                 print("Se ha realizado un prestamo del libro {}".format(book.title))
             else:
                 print("No tenemos ejemplares de ese libro en este momento...")
@@ -115,6 +117,9 @@ class DataB():
         if book:
             book.available = book.available + 1
             book.unavailable = book.unavailable - 1
+            for bookInfo in self.listaAuxiliar:
+                if (bookInfo.get("title") == book.title):
+                    bookInfo["cantidad"] = book.available
             print("Se ha regresado el libro {}".format(book.title))
         else:
             print("El libro que busca no se encuentra en nuestra base de datos...")
